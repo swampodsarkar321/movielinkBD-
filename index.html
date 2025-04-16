@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie LinkBD</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #141414;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    header {
+      background-color: #000;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    header h1 {
+      color: #e50914;
+      margin: 0;
+      font-size: 36px;
+      letter-spacing: 2px;
+    }
+
+    .search-bar {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 30px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background-color: #333;
+      color: white;
+    }
+
+    main {
+      padding-top: 60px;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 40px;
+    }
+
+    .movie-card {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .movie-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .movie-info {
+      padding: 15px;
+    }
+
+    .movie-info h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .movie-info .rating {
+      background-color: #e50914;
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 14px;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .movie-info .downloads {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #e50914;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .download-btn:hover {
+      background-color: #b0060f;
+    }
+
+    .banner-section {
+      width: 270px;
+      padding: 20px;
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .banner-slider {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+      padding-right: 10px;
+      justify-content: flex-start;
+    }
+
+    .banner-movie-card {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      height: 200px; /* Adjusted height for better visibility */
+    }
+
+    .banner-movie-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures image scales properly */
+      border-radius: 8px;
+    }
+
+    .banner-movie-info {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .banner-movie-info h4 {
+      font-size: 16px;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .owner-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #e50914;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: background 0.3s;
+      z-index: 100;
+    }
+
+    .owner-btn:hover {
+      background: #b0060f;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 101;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: linear-gradient(145deg, #222, #1a1a1a);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: #fff;
+      width: 320px;
+      box-shadow: 0 0 30px rgba(229, 9, 20, 0.4);
+      position: relative;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 15px;
+      font-size: 24px;
+      color: #e50914;
+    }
+
+    .modal-content p {
+      margin: 10px 0 20px;
+      font-size: 16px;
+    }
+
+    .social-links {
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 24px;
+      transition: transform 0.3s;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+
+    .social-links img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎬 Movie LinkBD</h1>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search movies..." onkeyup="filterMovies()">
+    </div>
+  </header>
+
+  <main>
+    <div class="movie-grid" id="movieGrid"></div>
+  </main>
+
+  <div class="banner-section">
+    <h3 style="color: #fff; text-align: center;">Top Movies</h3>
+    <div class="banner-slider" id="bannerSlider"></div>
+  </div>
+
+  <button class="owner-btn" onclick="document.getElementById('ownerModal').style.display='flex'">Owner Info</button>
+
+  <div id="ownerModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('ownerModal').style.display='none'">&times;</span>
+      <h2>👑 সম্পদ</h2>
+      <p>Follow me on social media</p>
+      <div class="social-links">
+        <a href="https://facebook.com" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" />
+        </a>
+        <a href="https://instagram.com" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAc3APo52hRdnqdkLm4thLGtp0sviNwuWk",
+      authDomain: "support-ticket-dd29b.firebaseapp.com",
+      databaseURL: "https://support-ticket-dd29b-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "support-ticket-dd29b",
+      storageBucket: "support-ticket-dd29b.appspot.com",
+      messagingSenderId: "621491651170",
+      appId: "1:621491651170:web:46e37cf7ae3cc54937873b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const movieGrid = document.getElementById('movieGrid');
+    const bannerSlider = document.getElementById('bannerSlider');
+    let movies = [];
+
+    db.ref('movies').on('value', snapshot => {
+      movieGrid.innerHTML = '';
+      bannerSlider.innerHTML = '';
+      movies = [];
+      snapshot.forEach(child => {
+        const movie = child.val();
+        movie.id = child.key; // get Firebase key for updating count
+        movies.push(movie);
+        renderMovie(movie);
+        renderBanner(movie);
+      });
+    });
+
+    function renderMovie(movie) {
+      const div = document.createElement('div');
+      div.className = 'movie-card';
+      div.innerHTML = `
+        <img src="${movie.poster}" alt="${movie.name}" />
+        <div class="movie-info">
+          <h3>${movie.name}</h3>
+          <div class="rating">⭐ ${movie.rating}</div>
+          <div class="downloads">⬇️ Downloaded: ${movie.downloads || 0}</div>
+          <a class="download-btn" href="${movie.downloadLink}" target="_blank" onclick="incrementDownload('${movie.id}')">Download</a>
+        </div>
+      `;
+      movieGrid.appendChild(div);
+    }
+
+    function renderBanner(movie) {
+      const div = document.createElement('div');
+      div.className = 'banner-movie-card';
+      div.innerHTML = `
+        <img src="${movie.poster}" alt="${movie.name}" />
+        <div class="banner-movie-info">
+          <h4>${movie.name}</h4>
+        </div>
+      `;
+      bannerSlider.appendChild(div);
+    }
+
+    function filterMovies() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase();
+      movieGrid.innerHTML = '';
+      bannerSlider.innerHTML = '';
+      movies.filter(movie => movie.name.toLowerCase().includes(keyword)).forEach(movie => {
+        renderMovie(movie);
+        renderBanner(movie);
+      });
+    }
+
+    function incrementDownload(id) {
+      const movieRef = db.ref(`movies/${id}`);
+      movieRef.transaction(movie => {
+        if (movie) {
+          movie.downloads = (movie.downloads || 0) + 1;
+        }
+        return movie;
+      });
+    }
+  </script>
+</body>
+</html>
