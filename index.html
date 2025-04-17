@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Movie LinkBD</title>
   <style>
-     body {
+    body {
       margin: 0;
       background-color: #141414;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -146,13 +146,13 @@
       border-radius: 10px;
       overflow: hidden;
       width: 100%;
-      height: 200px; /* Adjusted height for better visibility */
+      height: 200px;
     }
 
     .banner-movie-card img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Ensures image scales properly */
+      object-fit: cover;
       border-radius: 8px;
     }
 
@@ -257,9 +257,34 @@
       color: #fff;
       cursor: pointer;
     }
+
+    /* Notice Bar Styles (from your second code) */
+    #noticeBar {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #e50914;
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-size: 18px;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
   </style>
 </head>
 <body>
+  <!-- Notice Bar -->
+  <div id="noticeBar"></div>
+
   <header>
     <h1>🎬 Movie LinkBD</h1>
     <div class="search-bar">
@@ -312,8 +337,10 @@
     const db = firebase.database();
     const movieGrid = document.getElementById('movieGrid');
     const bannerSlider = document.getElementById('bannerSlider');
+    const noticeBar = document.getElementById("noticeBar");
     let movies = [];
 
+    // Load movies data
     db.ref('movies').on('value', snapshot => {
       movieGrid.innerHTML = '';
       bannerSlider.innerHTML = '';
@@ -327,6 +354,14 @@
       });
 
       renderTopMovies();
+    });
+
+    // Load notice
+    db.ref("notice").on("value", (snapshot) => {
+      if (snapshot.exists()) {
+        const notice = snapshot.val();
+        showNoticeBar(notice.message);
+      }
     });
 
     function renderMovie(movie) {
@@ -395,6 +430,15 @@
         }
         return movie;
       });
+    }
+
+    function showNoticeBar(message) {
+      noticeBar.textContent = message;
+      noticeBar.style.display = "block";
+
+      setTimeout(() => {
+        noticeBar.style.display = "none";
+      }, 8000);
     }
   </script>
 </body>
