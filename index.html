@@ -2,116 +2,135 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Movie LinkBD</title>
   <style>
+    :root {
+      --primary-color: #e50914;
+      --dark-bg: #141414;
+      --card-bg: #1f1f1f;
+      --text-color: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      background-color: #141414;
+      padding: 0;
+      background-color: var(--dark-bg);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
+      color: var(--text-color);
+      overflow-x: hidden;
     }
 
     header {
       background-color: #000;
-      padding: 20px;
+      padding: 15px 20px;
       text-align: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.8);
       position: relative;
+      width: 100%;
     }
 
     header h1 {
-      color: #e50914;
+      color: var(--primary-color);
       margin: 0;
-      font-size: 36px;
-      letter-spacing: 2px;
+      font-size: 28px;
+      letter-spacing: 1px;
     }
 
     .search-bar {
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
+      position: relative;
+      margin: 15px auto 0;
+      width: 90%;
+      max-width: 600px;
     }
 
     .search-bar input {
       width: 100%;
-      padding: 12px;
+      padding: 10px 15px;
       border-radius: 30px;
       border: none;
       outline: none;
-      font-size: 16px;
+      font-size: 14px;
       background-color: #333;
       color: white;
     }
 
     main {
-      padding-top: 60px;
+      padding: 70px 15px 15px;
+      width: 100%;
     }
 
     .movie-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      padding: 40px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      width: 100%;
     }
 
     .movie-card {
-      background-color: #1f1f1f;
-      border-radius: 10px;
+      background-color: var(--card-bg);
+      border-radius: 8px;
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
       position: relative;
     }
 
     .movie-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
     }
 
     .movie-card img {
       width: 100%;
-      height: 280px;
+      height: 220px;
       object-fit: cover;
       display: block;
     }
 
     .movie-info {
-      padding: 15px;
+      padding: 10px;
     }
 
     .movie-info h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: #fff;
+      margin: 0 0 5px;
+      font-size: 14px;
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .movie-info .rating {
-      background-color: #e50914;
+      background-color: var(--primary-color);
       display: inline-block;
-      padding: 4px 8px;
-      font-size: 14px;
+      padding: 3px 6px;
+      font-size: 12px;
       border-radius: 4px;
-      color: #fff;
+      color: var(--text-color);
     }
 
     .movie-info .downloads {
-      margin-top: 8px;
-      font-size: 14px;
+      margin-top: 5px;
+      font-size: 12px;
       color: #aaa;
     }
 
     .download-btn {
       display: inline-block;
-      margin-top: 10px;
-      padding: 8px 12px;
-      background-color: #e50914;
-      color: #fff;
+      margin-top: 8px;
+      padding: 6px 10px;
+      background-color: var(--primary-color);
+      color: var(--text-color);
       text-decoration: none;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: 12px;
       transition: background 0.3s;
+      width: 100%;
+      text-align: center;
     }
 
     .download-btn:hover {
@@ -119,68 +138,28 @@
     }
 
     .banner-section {
-      width: 270px;
-      padding: 20px;
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
-    }
-
-    .banner-slider {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      overflow-y: auto;
-      max-height: calc(100vh - 200px);
-      padding-right: 10px;
-      justify-content: flex-start;
-    }
-
-    .banner-movie-card {
-      background-color: #1f1f1f;
-      border-radius: 10px;
-      overflow: hidden;
-      width: 100%;
-      height: 200px;
-    }
-
-    .banner-movie-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .banner-movie-info {
-      padding: 10px;
-      text-align: center;
-    }
-
-    .banner-movie-info h4 {
-      font-size: 16px;
-      color: #fff;
-      margin-top: 10px;
+      display: none;
     }
 
     .owner-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #e50914;
-      color: #fff;
+      bottom: 15px;
+      right: 15px;
+      background: var(--primary-color);
+      color: var(--text-color);
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 50%;
       font-size: 14px;
       cursor: pointer;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       transition: background 0.3s;
       z-index: 100;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .owner-btn:hover {
@@ -208,34 +187,37 @@
 
     .modal-content {
       background: linear-gradient(145deg, #222, #1a1a1a);
-      padding: 30px;
+      padding: 20px;
       border-radius: 10px;
       text-align: center;
-      color: #fff;
-      width: 320px;
+      color: var(--text-color);
+      width: 90%;
+      max-width: 320px;
       box-shadow: 0 0 30px rgba(229, 9, 20, 0.4);
       position: relative;
     }
 
     .modal-content h2 {
-      margin-bottom: 15px;
-      font-size: 24px;
-      color: #e50914;
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: var(--primary-color);
     }
 
     .modal-content p {
-      margin: 10px 0 20px;
-      font-size: 16px;
+      margin: 10px 0 15px;
+      font-size: 14px;
     }
 
     .social-links {
-      margin-top: 20px;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
     }
 
     .social-links a {
-      margin: 0 15px;
+      margin: 0 10px;
       text-decoration: none;
-      font-size: 24px;
+      font-size: 20px;
       transition: transform 0.3s;
     }
 
@@ -244,46 +226,133 @@
     }
 
     .social-links img {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       object-fit: cover;
     }
 
     .close {
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 28px;
-      color: #fff;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: var(--text-color);
       cursor: pointer;
     }
 
-    /* Notice Bar Styles (from your second code) */
+    /* Notice Bar Styles */
     #noticeBar {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #e50914;
+      background-color: var(--primary-color);
       color: white;
-      padding: 20px 30px;
-      border-radius: 12px;
-      font-size: 18px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 16px;
       display: none;
       z-index: 9999;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
       animation: fadeIn 0.4s ease;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -60%); }
-      to { opacity: 1; transform: translate(-50%, -50%); }
+    /* Mobile Menu Button */
+    .menu-btn {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    /* Responsive Styles */
+    @media (min-width: 768px) {
+      header h1 {
+        font-size: 36px;
+      }
+
+      .search-bar {
+        width: 70%;
+      }
+
+      .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .movie-card img {
+        height: 250px;
+      }
+
+      .banner-section {
+        display: block;
+        width: 250px;
+        padding: 15px;
+        position: fixed;
+        top: 100px;
+        right: 15px;
+        height: auto;
+        max-height: 80vh;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+      }
+
+      .banner-slider {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow-y: auto;
+        max-height: calc(80vh - 100px);
+        padding-right: 5px;
+      }
+
+      .banner-movie-card {
+        height: 150px;
+      }
+
+      .modal-content {
+        padding: 25px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .movie-card img {
+        height: 280px;
+      }
+
+      .banner-section {
+        width: 270px;
+      }
+
+      .banner-movie-card {
+        height: 180px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- Notice Bar -->
   <div id="noticeBar"></div>
+
+  <!-- Mobile Menu Button (hidden on desktop) -->
+  <button class="menu-btn" id="menuBtn">☰</button>
 
   <header>
     <h1>🎬 Movie LinkBD</h1>
@@ -297,11 +366,11 @@
   </main>
 
   <div class="banner-section">
-    <h3 style="color: #fff; text-align: center;">Top Movies</h3>
+    <h3 style="color: #fff; text-align: center; margin-bottom: 15px;">Top Movies</h3>
     <div class="banner-slider" id="bannerSlider"></div>
   </div>
 
-  <button class="owner-btn" onclick="document.getElementById('ownerModal').style.display='flex'">Owner Info</button>
+  <button class="owner-btn" onclick="document.getElementById('ownerModal').style.display='flex'">i</button>
 
   <div id="ownerModal" class="modal">
     <div class="modal-content">
@@ -338,6 +407,7 @@
     const movieGrid = document.getElementById('movieGrid');
     const bannerSlider = document.getElementById('bannerSlider');
     const noticeBar = document.getElementById("noticeBar");
+    const menuBtn = document.getElementById("menuBtn");
     let movies = [];
 
     // Load movies data
@@ -364,15 +434,21 @@
       }
     });
 
+    // Toggle banner section on mobile
+    menuBtn.addEventListener('click', () => {
+      const banner = document.querySelector('.banner-section');
+      banner.style.display = banner.style.display === 'block' ? 'none' : 'block';
+    });
+
     function renderMovie(movie) {
       const div = document.createElement('div');
       div.className = 'movie-card';
       div.innerHTML = `
-        <img src="${movie.poster}" alt="${movie.name}" />
+        <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
         <div class="movie-info">
           <h3>${movie.name}</h3>
           <div class="rating">⭐ ${movie.rating}</div>
-          <div class="downloads">⬇️ Downloaded: ${movie.downloads || 0}</div>
+          <div class="downloads">⬇️ ${movie.downloads || 0}</div>
           <a class="download-btn" href="${movie.downloadLink}" target="_blank" onclick="incrementDownload('${movie.id}')">Download</a>
         </div>
       `;
@@ -388,7 +464,7 @@
         const div = document.createElement('div');
         div.className = 'banner-movie-card';
         div.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.name}" />
+          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
           <div class="banner-movie-info">
             <h4>${movie.name}</h4>
           </div>
@@ -413,7 +489,7 @@
         const div = document.createElement('div');
         div.className = 'banner-movie-card';
         div.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.name}" />
+          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
           <div class="banner-movie-info">
             <h4>${movie.name}</h4>
           </div>
@@ -440,6 +516,23 @@
         noticeBar.style.display = "none";
       }, 8000);
     }
+
+    // Hide banner section on mobile by default
+    if (window.innerWidth < 768) {
+      document.querySelector('.banner-section').style.display = 'none';
+      menuBtn.style.display = 'block';
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      if (window.innerWidth >= 768) {
+        document.querySelector('.banner-section').style.display = 'block';
+        menuBtn.style.display = 'none';
+      } else {
+        document.querySelector('.banner-section').style.display = 'none';
+        menuBtn.style.display = 'block';
+      }
+    });
   </script>
 </body>
 </html>
