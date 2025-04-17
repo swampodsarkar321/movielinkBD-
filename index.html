@@ -59,6 +59,47 @@
       color: white;
     }
 
+    .genre-filter {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 15px;
+      background-color: #000;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .genre-filter::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .genre-filter::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 5px;
+    }
+
+    .genre-btn {
+      padding: 8px 15px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .genre-btn:hover {
+      background-color: #555;
+    }
+
+    .genre-btn.active {
+      background-color: var(--primary-color);
+      font-weight: bold;
+    }
+
     main {
       padding: 70px 15px 15px;
       width: 100%;
@@ -104,13 +145,30 @@
       text-overflow: ellipsis;
     }
 
+    .movie-genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 5px 0;
+    }
+
+    .movie-genre {
+      background-color: #333;
+      color: #aaa;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      text-transform: capitalize;
+    }
+
     .movie-info .rating {
       background-color: var(--primary-color);
       display: inline-block;
-      padding: 3px 6px;
+      padding: 3px 8px;
       font-size: 12px;
       border-radius: 4px;
       color: var(--text-color);
+      margin-top: 5px;
     }
 
     .movie-info .downloads {
@@ -121,7 +179,7 @@
 
     .download-btn {
       display: inline-block;
-      margin-top: 8px;
+      margin-top: 10px;
       padding: 6px 10px;
       background-color: var(--primary-color);
       color: var(--text-color);
@@ -285,6 +343,10 @@
         width: 70%;
       }
 
+      .genre-filter {
+        padding: 15px 30px;
+      }
+
       .movie-grid {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 20px;
@@ -293,6 +355,11 @@
 
       .movie-card img {
         height: 250px;
+      }
+
+      .movie-genre {
+        font-size: 12px;
+        padding: 3px 10px;
       }
 
       .banner-section {
@@ -361,6 +428,19 @@
     </div>
   </header>
 
+  <!-- Genre Filter -->
+  <div class="genre-filter" id="genreFilter">
+    <button class="genre-btn active" data-genre="all">All</button>
+    <button class="genre-btn" data-genre="action">Action</button>
+    <button class="genre-btn" data-genre="thriller">Thriller</button>
+    <button class="genre-btn" data-genre="horror">Horror</button>
+    <button class="genre-btn" data-genre="drama">Drama</button>
+    <button class="genre-btn" data-genre="romantic">Romantic</button>
+    <button class="genre-btn" data-genre="comedy">Comedy</button>
+    <button class="genre-btn" data-genre="sci-fi">Sci-Fi</button>
+    <button class="genre-btn" data-genre="adventure">Adventure</button>
+  </div>
+
   <main>
     <div class="movie-grid" id="movieGrid"></div>
   </main>
@@ -408,7 +488,9 @@
     const bannerSlider = document.getElementById('bannerSlider');
     const noticeBar = document.getElementById("noticeBar");
     const menuBtn = document.getElementById("menuBtn");
+    const genreFilter = document.getElementById("genreFilter");
     let movies = [];
+    let selectedGenre = "all";
 
     // Load movies data
     db.ref('movies').on('value', snapshot => {
@@ -419,11 +501,14 @@
       snapshot.forEach(child => {
         const movie = child.val();
         movie.id = child.key;
+        // Ensure genre is always an array
+        if (!movie.genre || !Array.isArray(movie.genre)) {
+          movie.genre = [];
+        }
         movies.push(movie);
-        renderMovie(movie);
       });
 
-      renderTopMovies();
+      filterMovies();
     });
 
     // Load notice
@@ -431,6 +516,18 @@
       if (snapshot.exists()) {
         const notice = snapshot.val();
         showNoticeBar(notice.message);
+      }
+    });
+
+    // Genre filter buttons
+    genreFilter.addEventListener('click', (e) => {
+      if (e.target.classList.contains('genre-btn')) {
+        document.querySelectorAll('.genre-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        e.target.classList.add('active');
+        selectedGenre = e.target.dataset.genre;
+        filterMovies();
       }
     });
 
@@ -447,6 +544,9 @@
         <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
         <div class="movie-info">
           <h3>${movie.name}</h3>
+          <div class="movie-genres">
+            ${movie.genre.map(g => `<span class="movie-genre">${g}</span>`).join('')}
+          </div>
           <div class="rating">⭐ ${movie.rating}</div>
           <div class="downloads">⬇️ ${movie.downloads || 0}</div>
           <a class="download-btn" href="${movie.downloadLink}" target="_blank" onclick="incrementDownload('${movie.id}')">Download</a>
@@ -478,7 +578,20 @@
       movieGrid.innerHTML = '';
       bannerSlider.innerHTML = '';
 
-      const filtered = movies.filter(movie => movie.name.toLowerCase().includes(keyword));
+      let filtered = movies;
+      
+      // Apply genre filter
+      if (selectedGenre !== "all") {
+        filtered = filtered.filter(movie => 
+          movie.genre && movie.genre.includes(selectedGenre)
+        );
+      }
+      
+      // Apply search filter
+      if (keyword) {
+        filtered = filtered.filter(movie => movie.name.toLowerCase().includes(keyword));
+      }
+
       filtered.forEach(renderMovie);
 
       const topFiltered = [...filtered]
