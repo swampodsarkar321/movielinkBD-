@@ -105,14 +105,6 @@
       width: 100%;
     }
 
-    .loading {
-      display: flex;
-      justify-content: center;
-      padding: 50px;
-      font-size: 18px;
-      color: #aaa;
-    }
-
     .movie-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -126,7 +118,6 @@
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
       position: relative;
-      cursor: pointer;
     }
 
     .movie-card:hover {
@@ -186,14 +177,9 @@
       color: #aaa;
     }
 
-    .movie-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-
     .download-btn {
       display: inline-block;
+      margin-top: 10px;
       padding: 6px 10px;
       background-color: var(--primary-color);
       color: var(--text-color);
@@ -201,26 +187,12 @@
       border-radius: 4px;
       font-size: 12px;
       transition: background 0.3s;
+      width: 100%;
       text-align: center;
-      flex-grow: 1;
-      margin-right: 5px;
     }
 
     .download-btn:hover {
       background-color: #b0060f;
-    }
-
-    .like-btn {
-      background: transparent;
-      border: none;
-      color: #aaa;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .like-btn.liked {
-      color: var(--primary-color);
     }
 
     .banner-section {
@@ -252,8 +224,7 @@
       background: #b0060f;
     }
 
-    /* Movie Detail Modal */
-    .movie-modal {
+    .modal {
       display: none;
       position: fixed;
       z-index: 101;
@@ -261,158 +232,70 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.9);
+      background-color: rgba(0,0,0,0.85);
       justify-content: center;
       align-items: center;
       animation: fadeIn 0.3s;
-      overflow-y: auto;
-      padding: 20px;
     }
 
-    .movie-modal-content {
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
       background: linear-gradient(145deg, #222, #1a1a1a);
       padding: 20px;
       border-radius: 10px;
+      text-align: center;
+      color: var(--text-color);
       width: 90%;
-      max-width: 800px;
+      max-width: 320px;
       box-shadow: 0 0 30px rgba(229, 9, 20, 0.4);
       position: relative;
-      display: flex;
-      flex-direction: column;
     }
 
-    .movie-modal-close {
+    .modal-content h2 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: var(--primary-color);
+    }
+
+    .modal-content p {
+      margin: 10px 0 15px;
+      font-size: 14px;
+    }
+
+    .social-links {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 20px;
+      transition: transform 0.3s;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+
+    .social-links img {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+    }
+
+    .close {
       position: absolute;
-      top: 15px;
+      top: 10px;
       right: 15px;
       font-size: 24px;
       color: var(--text-color);
       cursor: pointer;
-      background: rgba(0,0,0,0.5);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .movie-modal-body {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    @media (min-width: 768px) {
-      .movie-modal-body {
-        flex-direction: row;
-      }
-    }
-
-    .movie-modal-poster {
-      flex: 1;
-      min-width: 200px;
-    }
-
-    .movie-modal-poster img {
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    .movie-modal-info {
-      flex: 2;
-    }
-
-    .movie-modal-title {
-      font-size: 24px;
-      margin-bottom: 10px;
-      color: var(--primary-color);
-    }
-
-    .movie-modal-meta {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .movie-modal-rating {
-      background-color: var(--primary-color);
-      padding: 3px 10px;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .movie-modal-downloads {
-      color: #aaa;
-      font-size: 14px;
-    }
-
-    .movie-modal-description {
-      margin-bottom: 15px;
-      line-height: 1.5;
-    }
-
-    .movie-modal-genres {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-
-    .movie-modal-genre {
-      background-color: #333;
-      color: #fff;
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-size: 14px;
-    }
-
-    .movie-modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .movie-modal-download {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background 0.3s;
-    }
-
-    .movie-modal-download:hover {
-      background-color: #b0060f;
-    }
-
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
-      gap: 10px;
-    }
-
-    .page-btn {
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .page-btn.active {
-      background-color: var(--primary-color);
-    }
-
-    .page-btn:hover:not(.active) {
-      background-color: #555;
     }
 
     /* Notice Bar Styles */
@@ -506,6 +389,10 @@
       .banner-movie-card {
         height: 150px;
       }
+
+      .modal-content {
+        padding: 25px;
+      }
     }
 
     @media (min-width: 1024px) {
@@ -524,11 +411,6 @@
       .banner-movie-card {
         height: 180px;
       }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
   </style>
 </head>
@@ -557,28 +439,16 @@
     <button class="genre-btn" data-genre="comedy">Comedy</button>
     <button class="genre-btn" data-genre="sci-fi">Sci-Fi</button>
     <button class="genre-btn" data-genre="adventure">Adventure</button>
-    <button class="genre-btn" data-genre="documentary">Documentary</button>
+	<button class="genre-btn" data-genre="documentary">Documentary</button>
   </div>
 
   <main>
-    <div class="loading" id="loadingIndicator">Loading movies...</div>
     <div class="movie-grid" id="movieGrid"></div>
-    <div class="pagination" id="pagination"></div>
   </main>
 
   <div class="banner-section">
     <h3 style="color: #fff; text-align: center; margin-bottom: 15px;">Top Movies</h3>
     <div class="banner-slider" id="bannerSlider"></div>
-  </div>
-
-  <!-- Movie Detail Modal -->
-  <div id="movieModal" class="movie-modal">
-    <div class="movie-modal-content">
-      <span class="movie-modal-close" id="closeMovieModal">&times;</span>
-      <div class="movie-modal-body" id="movieModalBody">
-        <!-- Content will be inserted here by JavaScript -->
-      </div>
-    </div>
   </div>
 
   <button class="owner-btn" onclick="document.getElementById('ownerModal').style.display='flex'">i</button>
@@ -613,111 +483,35 @@
       appId: "1:621491651170:web:46e37cf7ae3cc54937873b"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
-    // DOM Elements
     const movieGrid = document.getElementById('movieGrid');
     const bannerSlider = document.getElementById('bannerSlider');
     const noticeBar = document.getElementById("noticeBar");
     const menuBtn = document.getElementById("menuBtn");
     const genreFilter = document.getElementById("genreFilter");
-    const loadingIndicator = document.getElementById("loadingIndicator");
-    const pagination = document.getElementById("pagination");
-    const movieModal = document.getElementById("movieModal");
-    const closeMovieModal = document.getElementById("closeMovieModal");
-    const movieModalBody = document.getElementById("movieModalBody");
-    
-    // App State
     let movies = [];
-    let filteredMovies = [];
     let selectedGenre = "all";
-    let currentPage = 1;
-    const moviesPerPage = 20;
-    
-    // Initialize the app
-    init();
-    
-    function init() {
-      loadMovies();
-      setupEventListeners();
-    }
-    
-    function setupEventListeners() {
-      // Genre filter buttons
-      genreFilter.addEventListener('click', (e) => {
-        if (e.target.classList.contains('genre-btn')) {
-          document.querySelectorAll('.genre-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          e.target.classList.add('active');
-          selectedGenre = e.target.dataset.genre;
-          currentPage = 1; // Reset to first page when changing genre
-          filterMovies();
-        }
-      });
-      
-      // Toggle banner section on mobile
-      menuBtn.addEventListener('click', () => {
-        const banner = document.querySelector('.banner-section');
-        banner.style.display = banner.style.display === 'block' ? 'none' : 'block';
-      });
-      
-      // Close movie modal
-      closeMovieModal.addEventListener('click', () => {
-        movieModal.style.display = 'none';
-      });
-      
-      // Close modal when clicking outside
-      window.addEventListener('click', (e) => {
-        if (e.target === movieModal) {
-          movieModal.style.display = 'none';
-        }
-        if (e.target === document.getElementById('ownerModal')) {
-          document.getElementById('ownerModal').style.display = 'none';
-        }
-      });
-    }
-    
-    function loadMovies() {
-      loadingIndicator.style.display = 'flex';
+
+    // Load movies data
+    db.ref('movies').on('value', snapshot => {
       movieGrid.innerHTML = '';
-      
-      db.ref('movies').on('value', (snapshot) => {
-        loadingIndicator.style.display = 'none';
-        
-        if (!snapshot.exists()) {
-          showNoticeBar("No movies found in database");
-          return;
+      bannerSlider.innerHTML = '';
+      movies = [];
+
+      snapshot.forEach(child => {
+        const movie = child.val();
+        movie.id = child.key;
+        // Ensure genre is always an array
+        if (!movie.genre || !Array.isArray(movie.genre)) {
+          movie.genre = [];
         }
-        
-        movies = [];
-        snapshot.forEach((child) => {
-          const movie = child.val();
-          movie.id = child.key;
-          // Ensure genre is always an array
-          if (!movie.genre || !Array.isArray(movie.genre)) {
-            movie.genre = [];
-          }
-          // Initialize likes if not exists
-          if (!movie.likes) {
-            movie.likes = 0;
-          }
-          // Initialize views if not exists
-          if (!movie.views) {
-            movie.views = 0;
-          }
-          movies.push(movie);
-        });
-        
-        filterMovies();
-      }, (error) => {
-        loadingIndicator.style.display = 'none';
-        showNoticeBar("Error loading movies: " + error.message);
+        movies.push(movie);
       });
-    }
-    
+
+      filterMovies();
+    });
+
     // Load notice
     db.ref("notice").on("value", (snapshot) => {
       if (snapshot.exists()) {
@@ -725,181 +519,100 @@
         showNoticeBar(notice.message);
       }
     });
-    
+
+    // Genre filter buttons
+    genreFilter.addEventListener('click', (e) => {
+      if (e.target.classList.contains('genre-btn')) {
+        document.querySelectorAll('.genre-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        e.target.classList.add('active');
+        selectedGenre = e.target.dataset.genre;
+        filterMovies();
+      }
+    });
+
+    // Toggle banner section on mobile
+    menuBtn.addEventListener('click', () => {
+      const banner = document.querySelector('.banner-section');
+      banner.style.display = banner.style.display === 'block' ? 'none' : 'block';
+    });
+
+    function renderMovie(movie) {
+      const div = document.createElement('div');
+      div.className = 'movie-card';
+      div.innerHTML = `
+        <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
+        <div class="movie-info">
+          <h3>${movie.name}</h3>
+          <div class="movie-genres">
+            ${movie.genre.map(g => `<span class="movie-genre">${g}</span>`).join('')}
+          </div>
+          <div class="rating">⭐ ${movie.rating}</div>
+          <div class="downloads">⬇️ ${movie.downloads || 0}</div>
+          <a class="download-btn" href="${movie.downloadLink}" target="_blank" onclick="incrementDownload('${movie.id}')">Download</a>
+        </div>
+      `;
+      movieGrid.appendChild(div);
+    }
+
+    function renderTopMovies() {
+      const topMovies = [...movies]
+        .sort((a, b) => (b.downloads || 0) - (a.downloads || 0))
+        .slice(0, 3);
+
+      topMovies.forEach(movie => {
+        const div = document.createElement('div');
+        div.className = 'banner-movie-card';
+        div.innerHTML = `
+          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
+          <div class="banner-movie-info">
+            <h4>${movie.name}</h4>
+          </div>
+        `;
+        bannerSlider.appendChild(div);
+      });
+    }
+
     function filterMovies() {
       const keyword = document.getElementById('searchInput').value.toLowerCase();
+      movieGrid.innerHTML = '';
+      bannerSlider.innerHTML = '';
+
+      let filtered = movies;
       
       // Apply genre filter
-      if (selectedGenre === "all") {
-        filteredMovies = [...movies];
-      } else {
-        filteredMovies = movies.filter(movie => 
+      if (selectedGenre !== "all") {
+        filtered = filtered.filter(movie => 
           movie.genre && movie.genre.includes(selectedGenre)
         );
       }
       
       // Apply search filter
       if (keyword) {
-        filteredMovies = filteredMovies.filter(movie => 
-          movie.name.toLowerCase().includes(keyword)
-        );
+        filtered = filtered.filter(movie => movie.name.toLowerCase().includes(keyword));
       }
-      
-      renderMovies();
-      renderTopMovies();
-      renderPagination();
-    }
-    
-    function renderMovies() {
-      movieGrid.innerHTML = '';
-      
-      // Calculate pagination
-      const startIndex = (currentPage - 1) * moviesPerPage;
-      const endIndex = startIndex + moviesPerPage;
-      const paginatedMovies = filteredMovies.slice(startIndex, endIndex);
-      
-      if (paginatedMovies.length === 0) {
-        movieGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #aaa;">No movies found matching your criteria</div>';
-        return;
-      }
-      
-      paginatedMovies.forEach(movie => {
-        const div = document.createElement('div');
-        div.className = 'movie-card';
-        div.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" onclick="showMovieDetails('${movie.id}')" />
-          <div class="movie-info">
-            <h3 onclick="showMovieDetails('${movie.id}')">${movie.name}</h3>
-            <div class="movie-genres">
-              ${movie.genre.map(g => `<span class="movie-genre">${g}</span>`).join('')}
-            </div>
-            <div class="rating">⭐ ${movie.rating || 'N/A'}</div>
-            <div class="downloads">⬇️ ${movie.downloads || 0} | 👁️ ${movie.views || 0}</div>
-            <div class="movie-actions">
-              <a class="download-btn" href="${movie.downloadLink}" target="_blank" onclick="incrementDownload('${movie.id}', event)">Download</a>
-              <button class="like-btn ${isMovieLiked(movie.id) ? 'liked' : ''}" onclick="toggleLike('${movie.id}', this)">
-                ❤️ ${movie.likes || 0}
-              </button>
-            </div>
-          </div>
-        `;
-        movieGrid.appendChild(div);
-      });
-    }
-    
-    function renderTopMovies() {
-      bannerSlider.innerHTML = '';
-      
-      const topMovies = [...filteredMovies]
+
+      filtered.forEach(renderMovie);
+
+      const topFiltered = [...filtered]
         .sort((a, b) => (b.downloads || 0) - (a.downloads || 0))
         .slice(0, 3);
-      
-      if (topMovies.length === 0) return;
-      
-      topMovies.forEach(movie => {
+
+      topFiltered.forEach(movie => {
         const div = document.createElement('div');
         div.className = 'banner-movie-card';
         div.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" onclick="showMovieDetails('${movie.id}')" />
+          <img src="${movie.poster}" alt="${movie.name}" loading="lazy" />
           <div class="banner-movie-info">
-            <h4 onclick="showMovieDetails('${movie.id}')">${movie.name}</h4>
+            <h4>${movie.name}</h4>
           </div>
         `;
         bannerSlider.appendChild(div);
       });
     }
-    
-    function renderPagination() {
-      pagination.innerHTML = '';
-      const pageCount = Math.ceil(filteredMovies.length / moviesPerPage);
-      
-      if (pageCount <= 1) return;
-      
-      // Previous button
-      const prevBtn = document.createElement('button');
-      prevBtn.className = 'page-btn';
-      prevBtn.textContent = '←';
-      prevBtn.disabled = currentPage === 1;
-      prevBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderMovies();
-          renderPagination();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-      pagination.appendChild(prevBtn);
-      
-      // Page buttons
-      for (let i = 1; i <= pageCount; i++) {
-        const pageBtn = document.createElement('button');
-        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-        pageBtn.textContent = i;
-        pageBtn.addEventListener('click', () => {
-          currentPage = i;
-          renderMovies();
-          renderPagination();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        pagination.appendChild(pageBtn);
-      }
-      
-      // Next button
-      const nextBtn = document.createElement('button');
-      nextBtn.className = 'page-btn';
-      nextBtn.textContent = '→';
-      nextBtn.disabled = currentPage === pageCount;
-      nextBtn.addEventListener('click', () => {
-        if (currentPage < pageCount) {
-          currentPage++;
-          renderMovies();
-          renderPagination();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-      pagination.appendChild(nextBtn);
-    }
-    
-    function showMovieDetails(movieId) {
-      const movie = movies.find(m => m.id === movieId);
-      if (!movie) return;
-      
-      // Increment view count
-      incrementViewCount(movieId);
-      
-      // Update modal content
-      movieModalBody.innerHTML = `
-        <div class="movie-modal-poster">
-          <img src="${movie.poster}" alt="${movie.name}" />
-        </div>
-        <div class="movie-modal-info">
-          <h2 class="movie-modal-title">${movie.name}</h2>
-          <div class="movie-modal-meta">
-            <div class="movie-modal-rating">⭐ ${movie.rating || 'N/A'}</div>
-            <div class="movie-modal-downloads">⬇️ ${movie.downloads || 0} downloads</div>
-            <div class="movie-modal-downloads">👁️ ${movie.views || 0} views</div>
-          </div>
-          <div class="movie-modal-genres">
-            ${movie.genre.map(g => `<span class="movie-modal-genre">${g}</span>`).join('')}
-          </div>
-          <p class="movie-modal-description">${movie.description || 'No description available.'}</p>
-          <div class="movie-modal-actions">
-            <button class="movie-modal-download" onclick="incrementDownload('${movie.id}'); window.open('${movie.downloadLink}', '_blank')">
-              Download Now
-            </button>
-            <button class="like-btn ${isMovieLiked(movie.id) ? 'liked' : ''}" onclick="toggleLike('${movie.id}', this)">
-              ❤️ ${movie.likes || 0}
-            </button>
-          </div>
-        </div>
-      `;
-      
-      movieModal.style.display = 'flex';
-    }
-    
-    function incrementDownload(id, event) {
-      if (event) event.stopPropagation();
-      
+
+    function incrementDownload(id) {
       const movieRef = db.ref(`movies/${id}`);
       movieRef.transaction(movie => {
         if (movie) {
@@ -908,73 +621,22 @@
         return movie;
       });
     }
-    
-    function incrementViewCount(id) {
-      const movieRef = db.ref(`movies/${id}`);
-      movieRef.transaction(movie => {
-        if (movie) {
-          movie.views = (movie.views || 0) + 1;
-        }
-        return movie;
-      });
-    }
-    
-    function toggleLike(movieId, button) {
-      event.stopPropagation();
-      
-      // Check if already liked in localStorage
-      const likedMovies = JSON.parse(localStorage.getItem('likedMovies') || '[]');
-      const isLiked = likedMovies.includes(movieId);
-      
-      const movieRef = db.ref(`movies/${movieId}`);
-      
-      if (isLiked) {
-        // Unlike
-        movieRef.transaction(movie => {
-          if (movie) {
-            movie.likes = Math.max(0, (movie.likes || 0) - 1);
-          }
-          return movie;
-        });
-        localStorage.setItem('likedMovies', JSON.stringify(likedMovies.filter(id => id !== movieId)));
-        button.classList.remove('liked');
-      } else {
-        // Like
-        movieRef.transaction(movie => {
-          if (movie) {
-            movie.likes = (movie.likes || 0) + 1;
-          }
-          return movie;
-        });
-        localStorage.setItem('likedMovies', JSON.stringify([...likedMovies, movieId]));
-        button.classList.add('liked');
-      }
-      
-      // Update like count in button text
-      const likeCount = parseInt(button.textContent.match(/\d+/) || 0);
-      button.innerHTML = button.innerHTML.replace(/\d+/, isLiked ? likeCount - 1 : likeCount + 1);
-    }
-    
-    function isMovieLiked(movieId) {
-      const likedMovies = JSON.parse(localStorage.getItem('likedMovies') || '[]');
-      return likedMovies.includes(movieId);
-    }
-    
+
     function showNoticeBar(message) {
       noticeBar.textContent = message;
       noticeBar.style.display = "block";
-      
+
       setTimeout(() => {
         noticeBar.style.display = "none";
       }, 8000);
     }
-    
+
     // Hide banner section on mobile by default
     if (window.innerWidth < 768) {
       document.querySelector('.banner-section').style.display = 'none';
       menuBtn.style.display = 'block';
     }
-    
+
     // Handle window resize
     window.addEventListener('resize', function() {
       if (window.innerWidth >= 768) {
