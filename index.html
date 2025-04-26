@@ -107,6 +107,52 @@
       color: var(--text-muted);
     }
 
+    /* Header Ad Banner */
+    .header-ad-container {
+      width: 100%;
+      overflow: hidden;
+      background-color: rgba(0,0,0,0.7);
+      height: 60px;
+      position: relative;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .header-ad-banner {
+      display: flex;
+      position: absolute;
+      white-space: nowrap;
+      animation: scrollBanner 30s linear infinite;
+    }
+
+    .header-ad-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 30px;
+      height: 60px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .header-ad-item:hover {
+      color: var(--primary-color);
+      transform: scale(1.05);
+    }
+
+    .header-ad-item img {
+      height: 40px;
+      margin-right: 15px;
+      border-radius: 4px;
+    }
+
+    @keyframes scrollBanner {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
     /* Navigation */
     nav {
       background-color: var(--darker-bg);
@@ -969,6 +1015,16 @@
       .movie-modal-sidebar {
         width: 100%;
       }
+      
+      .header-ad-item {
+        font-size: 14px;
+        padding: 0 20px;
+      }
+      
+      .header-ad-item img {
+        height: 30px;
+        margin-right: 10px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -1016,6 +1072,21 @@
         width: 100%;
         justify-content: center;
       }
+      
+      .header-ad-container {
+        height: 50px;
+      }
+      
+      .header-ad-item {
+        height: 50px;
+        font-size: 12px;
+        padding: 0 15px;
+      }
+      
+      .header-ad-item img {
+        height: 25px;
+        margin-right: 8px;
+      }
     }
 
     @media (max-width: 576px) {
@@ -1047,6 +1118,21 @@
       .movie-modal-meta {
         font-size: 14px;
       }
+      
+      .header-ad-container {
+        height: 40px;
+      }
+      
+      .header-ad-item {
+        height: 40px;
+        font-size: 11px;
+        padding: 0 10px;
+      }
+      
+      .header-ad-item img {
+        height: 20px;
+        margin-right: 5px;
+      }
     }
   </style>
 </head>
@@ -1068,6 +1154,13 @@
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search for movies...">
         <i class="fas fa-search"></i>
+      </div>
+    </div>
+    
+    <!-- Header Ad Banner -->
+    <div class="header-ad-container">
+      <div class="header-ad-banner" id="headerAdBanner">
+        <!-- Ads will be loaded here dynamically -->
       </div>
     </div>
   </header>
@@ -1298,6 +1391,7 @@
     const closeOwnerModal = document.getElementById("closeOwnerModal");
     const movieModal = document.getElementById("movieModal");
     const closeMovieModal = document.getElementById("closeMovieModal");
+    const headerAdBanner = document.getElementById("headerAdBanner");
     
     // Modal Elements
     const modalTitle = document.getElementById("modalTitle");
@@ -1321,12 +1415,14 @@
     let selectedGenre = "all";
     let currentPage = 1;
     const moviesPerPage = 20;
+    let headerAds = [];
     
     // Initialize the app
     init();
     
     function init() {
       loadMovies();
+      loadHeaderAds();
       setupEventListeners();
     }
     
@@ -1419,6 +1515,62 @@
       });
     }
     
+    function loadHeaderAds() {
+      db.ref('headerAds').on('value', (snapshot) => {
+        if (snapshot.exists()) {
+          headerAds = [];
+          snapshot.forEach((child) => {
+            const ad = child.val();
+            ad.id = child.key;
+            headerAds.push(ad);
+          });
+          renderHeaderAds();
+        }
+      });
+    }
+    
+    function renderHeaderAds() {
+      if (headerAds.length === 0) {
+        document.querySelector('.header-ad-container').style.display = 'none';
+        return;
+      }
+      
+      headerAdBanner.innerHTML = '';
+      
+      // Duplicate ads to create seamless looping effect
+      const adsToShow = [...headerAds, ...headerAds];
+      
+      adsToShow.forEach(ad => {
+        const adItem = document.createElement('a');
+        adItem.className = 'header-ad-item';
+        adItem.href = ad.link || '#';
+        adItem.target = '_blank';
+        adItem.rel = 'noopener noreferrer';
+        
+        if (ad.image) {
+          adItem.innerHTML = `
+            <img src="${ad.image}" alt="${ad.text || 'Advertisement'}">
+            ${ad.text || ''}
+          `;
+        } else {
+          adItem.textContent = ad.text || 'Advertisement';
+        }
+        
+        headerAdBanner.appendChild(adItem);
+      });
+      
+      // Adjust animation duration based on number of ads
+      const duration = headerAds.length * 5; // 5 seconds per ad
+      document.styleSheets[0].insertRule(`
+        @keyframes scrollBanner {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+      `, document.styleSheets[0].cssRules.length);
+      
+      headerAdBanner.style.animationDuration = `${duration}s`;
+    }
+    
     // Load notice
     db.ref("notice").on("value", (snapshot) => {
       if (snapshot.exists()) {
@@ -1475,6 +1627,7 @@
           <div class="movie-info">
             <h3 class="movie-title" onclick="showMovieDetails('${movie.id}')">${movie.name}</h3>
             <div class="movie-meta">
+              <span class="movie-year">${movie.year || 'N/A'}</span>
               <span class="movie-rating">⭐ ${movie.rating}</span>
             </div>
             <div class="movie-actions">
